@@ -2,8 +2,12 @@ var express = require('express');
 var bodyParser = require('body-parser')
 var app = express();
 var http = require('http').Server(app);
+var cors = require('cors');
+app.use(cors())
 var io = require('socket.io')(http);
 var mongoose = require('mongoose');
+var Mockgoose = require('mockgoose').Mockgoose;
+var mockgoose = new Mockgoose(mongoose)
 
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
@@ -14,7 +18,9 @@ var Message = mongoose.model('Message',{
   message : String
 })
 
-var dbUrl = 'mongodb://amkurian:amkurian1@ds257981.mlab.com:57981/simple-chat'
+
+// var dbUrl = 'mongodb://karma:@ds257981.mlab.com:57981/simple-chat'
+var dbUrl = 'mongodb://karma:karma@karma-chat-4hbhj.gcp.mongodb.net:80/chat'
 
 app.get('/messages', (req, res) => {
   Message.find({},(err, messages)=> {
@@ -61,9 +67,13 @@ io.on('connection', () =>{
   console.log('a user is connected')
 })
 
-mongoose.connect(dbUrl ,{useMongoClient : true} ,(err) => {
-  console.log('mongodb connected',err);
-})
+mockgoose.prepareStorage().then(function () {
+    mongoose.connect(dbUrl, { useMongoClient: true }, (err) => {
+        console.log('mongodb connected', err);
+    })
+});
+
+
 
 var server = http.listen(3000, () => {
   console.log('server is running on port', server.address().port);
