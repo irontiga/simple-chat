@@ -4,7 +4,8 @@
   "description": "demo chat app",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",

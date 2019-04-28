@@ -23,7 +23,7 @@ var Message = mongoose.model('Message',{
 var dbUrl = 'mongodb://karma:karma@karma-chat-4hbhj.gcp.mongodb.net:80/chat'
 
 app.get('/messages', (req, res) => {
-  Message.find({},(err, messages)=> {
+  Message.find({}).limit(40).exec((err, messages)=> {
     res.send(messages);
   })
 })
